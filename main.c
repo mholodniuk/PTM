@@ -58,13 +58,12 @@ int main()
 	LCD_Home();
 	char text[20];
 	char symbol;
-	int data = 0;
+	int input = 0;
 	char operacja;
 	int wczytano = -1;
 
 	int liczba1 = 0;
 	int liczba1final = -1;
-	int liczba2 = 0;
 	int liczba2final = -1;
 	int suma = 0;
 
@@ -75,10 +74,10 @@ int main()
 		sprintf(text, "liczba: %d", suma);
 		LCD_WriteText(text);
 		LCD_GoTo(0, 1);
-		data = getKey16();
+		input = getKey16();
 
-		if(data != 0) {
-			symbol = symbols[data];
+		if(input != 0) {
+			symbol = symbols[input];
 
 			switch(symbol) {
 			case '1':
@@ -117,90 +116,20 @@ int main()
 					sprintf(text, "Pressed: %d", liczba1);
 				}
 				break;
-			case '4':
-				if(wczytano < 0) {
-					liczba1 = 4;
-					wczytano = 1;
-					sprintf(text, "Pressed 4: %d", liczba1);
-				} else {
-					liczba2 = 4;
-					sprintf(text, "Pressed: %d", liczba2);
-				}
-				break;
-			case '5':
-				if(wczytano < 0) {
-					liczba1 = 5;
-					wczytano = 1;
-					sprintf(text, "Pressed: %d", liczba1);
-				} else {
-					liczba2 = 5;
-					sprintf(text, "Pressed: %d", liczba2);
-				}
-				break;
-			case '6':
-				if(wczytano < 0) {
-					liczba1 = 6;
-					wczytano = 1;
-					sprintf(text, "Pressed: %d", liczba1);
-				} else {
-					liczba2 = 6;
-					sprintf(text, "Pressed: %d", liczba2);
-				}
-				break;
-			case '7':
-				if(wczytano < 0) {
-					liczba1 = 7;
-					wczytano = 1;
-					sprintf(text, "Pressed: %d", liczba1);
-				} else {
-					liczba2 = 7;
-					sprintf(text, "Pressed: %d", liczba2);
-				}
-				break;
-			case '8':
-				if(wczytano < 0) {
-					liczba1 = 8;
-					wczytano = 1;
-					sprintf(text, "Pressed: %d", liczba1);
-				} else {
-					liczba2 = 8;
-					sprintf(text, "Pressed: %d", liczba2);
-				}
-				break;
-			case '9':
-				if(wczytano < 0) {
-					liczba1 = 9;
-					wczytano = 1;
-					sprintf(text, "Pressed: %d", liczba1);
-				} else {
-					liczba2 = 9;
-					sprintf(text, "Pressed: %d", liczba2);
-				}
-				break;
 			case '+':
 				operacja = '+';
-				if(liczba1final == -1 && liczba2final == -1)
-					liczba1final = liczba1;
-				else
-					liczba2final = liczba1;
+				liczba1final = liczba1;
 				liczba1 = 0;
 				wczytano = -1;
 				sprintf(text, "Pressed: %c %d %d", symbol, liczba1final, liczba2final);
 				break;
-			case '-':
-				operacja = '-';
-				sprintf(text, "Pressed: %c", symbol);
-				break;
 			case '=':
+				liczba2final = liczba1;
 				if(operacja == '+') {
 					suma = liczba1final + liczba2final;
 				}
-				if(operacja == '-') {
-					suma = liczba1 - liczba2;
-				}
 				sprintf(text, "Pressed: %c", symbol);
 				liczba1 = 0;
-				liczba2 = 0;
 				liczba1final = 0;
 				liczba2final = 0;
 				wczytano = -1;
