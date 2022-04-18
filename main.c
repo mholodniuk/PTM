@@ -1,4 +1,3 @@
-
 #include <avr/io.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,6 +20,10 @@
 #endif
 
 char symbols[] = {'0','7','8','9','-','4','5','6','+','1','2','3','C','*','0','#','='};
+
+int addToCurrentNumber(int current, int other) {
+	return current * 10 + other;
+}
 
 int getKey16() {
 	for (int i = 0; i < 4; i++) {
@@ -60,18 +63,18 @@ int main()
 	int wczytano = -1;
 
 	int liczba1 = 0;
+	int liczba1final = -1;
 	int liczba2 = 0;
+	int liczba2final = -1;
 	int suma = 0;
 
 	while (1) {
 		LCD_Clear();
 
 		LCD_GoTo(0, 0);
-		sprintf(text, "Result: %d", suma);
+		sprintf(text, "liczba: %d", suma);
 		LCD_WriteText(text);
-
 		LCD_GoTo(0, 1);
-
 		data = getKey16();
 
 		if(data != 0) {
@@ -81,31 +84,37 @@ int main()
 			case '1':
 				if(wczytano < 0) {
 					liczba1 = 1;
+					suma = liczba1;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", liczba1);
 				} else {
-					liczba2 = 1;
-					sprintf(text, "Pressed: %d", liczba2);
+					liczba1 = addToCurrentNumber(liczba1, 1);
+					suma = liczba1;
+					sprintf(text, "Pressed: %d", liczba1);
 				}
 				break;
 			case '2':
 				if(wczytano < 0) {
 					liczba1 = 2;
+					suma = liczba1;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", liczba1);
 				} else {
-					liczba2 = 2;
-					sprintf(text, "Pressed: %d", liczba2);
+					liczba1 = addToCurrentNumber(liczba1, 2);
+					suma = liczba1;
+					sprintf(text, "Pressed: %d", liczba1);
 				}
 				break;
 			case '3':
 				if(wczytano < 0) {
 					liczba1 = 3;
+					suma = liczba1;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", liczba1);
 				} else {
-					liczba2 = 3;
-					sprintf(text, "Pressed: %d", liczba2);
+					liczba1 = addToCurrentNumber(liczba1, 3);
+					suma = liczba1;
+					sprintf(text, "Pressed: %d", liczba1);
 				}
 				break;
 			case '4':
@@ -170,32 +179,40 @@ int main()
 				break;
 			case '+':
 				operacja = '+';
-				sprintf(text, "Pressed: %c", symbol);
+				if(liczba1final == -1 && liczba2final == -1)
+					liczba1final = liczba1;
+				else
+					liczba2final = liczba1;
+				liczba1 = 0;
+				wczytano = -1;
+				sprintf(text, "Pressed: %c %d %d", symbol, liczba1final, liczba2final);
 				break;
 			case '-':
 				operacja = '-';
 				sprintf(text, "Pressed: %c", symbol);
 				break;
 			case '=':
-				if(operacja == '+' && wczytano > 0) {
-					suma = liczba1 + liczba2;
+				if(operacja == '+') {
+					suma = liczba1final + liczba2final;
 				}
-				if(operacja == '-' && wczytano > 0) {
+				if(operacja == '-') {
 					suma = liczba1 - liczba2;
 				}
 				sprintf(text, "Pressed: %c", symbol);
 				liczba1 = 0;
 				liczba2 = 0;
+				liczba1final = 0;
+				liczba2final = 0;
 				wczytano = -1;
 				break;
 			default:
 				break;
 			}
 			LCD_WriteText(text);
-			_delay_ms(500);
+			_delay_ms(200);
 		}
 		//LCD_WriteText(text);
-		_delay_ms(100);
+		_delay_ms(200);
 		while (bit_is_clear(PINC, PD0) || bit_is_clear(PINC, PD1) || bit_is_clear(PINC, PD2) || bit_is_clear(PINC, PD3))
 			_delay_ms(100);
 	}
