@@ -216,12 +216,32 @@ int main()
 				// do sprawdzenia co jest w zmiennych
 				sprintf(text, "Pressed: %c %d %d", symbol, liczba1final, liczba2final);
 				break;
+			case '*':
+				operacja = '*';
+				liczba1final = liczba1;
+				liczba1 = 0;
+				wczytano = -1;
+				sprintf(text, "Pressed: %c %d %d", symbol, liczba1final, liczba2final);
+				break;
+			case '-':
+				operacja = '-';
+				liczba1final = liczba1;
+				liczba1 = 0;
+				wczytano = -1;
+				sprintf(text, "Pressed: %c %d %d", symbol, liczba1final, liczba2final);
+				break;
 			case '=':
 				// wczytanie zmiennej tymczasowej do drugiej zmiennej finalnej
 				liczba2final = liczba1;
 				// wykonanie odpowiednich operacji
 				if(operacja == '+') {
 					suma = liczba1final + liczba2final;
+				}
+				if(operacja == '*') {
+					suma = liczba1final * liczba2final;
+				}
+				if(operacja == '-') {
+					suma = liczba1final - liczba2final;
 				}
 				sprintf(text, "Pressed: %c", symbol);
 				// zresetowanie wszystkich zmiennych
