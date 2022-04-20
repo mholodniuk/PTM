@@ -35,6 +35,9 @@ int getKey16() {
 			// sprawdzenie czy przycisk jest wcisniety -> stan niski dla kolumny
 			if (bit_is_clear(PINC, j)) {
 				_delay_ms(20);
+				while(bit_is_clear(PIND, j)) 
+					_delay_ms(5);
+				sbi(PORTC, i + 4);
 				return i * 4 + j + 1; // [1 - 16] jak na plytce
 			}
 		}
