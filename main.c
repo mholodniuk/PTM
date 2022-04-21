@@ -7,7 +7,7 @@
 #include <math.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
-#include "lcd/HD44780.h"
+#include "HD44780.h"
 
 #ifndef _BV
 #define _BV(bit) (1<<(bit))
@@ -20,7 +20,11 @@
 #endif
 
 // pusty pierwszy symbol bo getKey16() zwraca od 1-16
-char symbols[] = {' ','7','8','9','-','4','5','6','+','1','2','3','C','*','0','#','='};
+char symbols[] = {' ',
+				  '7','8','9','+',
+				  '4','5','6','-',
+				  '1','2','3','*',
+				  '#','0','C','='};
 
 // funkcja dodaj¹ca cyfrê na koniec liczby
 int addToCurrentNumber(int current, int other) {
@@ -34,7 +38,7 @@ int getKey16() {
 		for (int j = 0; j < 4; j++) {
 			// sprawdzenie czy przycisk jest wcisniety -> stan niski dla kolumny
 			if (bit_is_clear(PINC, j)) {
-				_delay_ms(20);
+				_delay_ms(10);
 				// to sprawia ze nie widac w trakcie klikniecia co jest klikniete
 				// ale chyba w rzeczywistoœci tak powinno by
 				while(bit_is_clear(PINC, j)) _delay_ms(5);
@@ -73,15 +77,13 @@ int main()
 	// bool czy wczytano juz pierwsza cyfre z liczby
 	int wczytano = -1;
 
-	// zmienna pomocniczna do sumowania cyfr
-	// chyba da sie wyleliminowac te zmienna
-	int tmp = 0;
 	// pierwsza z liczb na ktorych bedzie wykonywana operacja arytmetyczna
 	int liczba1final = -1;
 	// druga z liczb na ktorych bedzie wykonywana operacja arytmetyczna
 	int liczba2final = -1;
 	// wynik operacji arytmetycznej
 	int wynik = 0;
+	int flaga = 1;
 
 	while (1) {
 
@@ -103,130 +105,116 @@ int main()
 			case '1':
 				if(wczytano < 0) { // jesli to pierwsza cyfra wprowadzona
 					// przypisanie wartoœci do zmiennych
-					tmp = 1;
-					wynik = tmp;
+					wynik = 1*flaga;
 					// zaznaczenie ze wczyatno jedna cyfre
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 1);
 				} else { // jesli to kolejna wczytywana liczba
-					tmp = addToCurrentNumber(tmp, 1);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 1*flaga);
 					sprintf(text, "Pressed: %d", 1);
 				}
 				break;
 			case '2':
 				if(wczytano < 0) {
-					tmp = 2;
-					wynik = tmp;
+					wynik = 2*flaga;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 2);
 				} else {
-					tmp = addToCurrentNumber(tmp, 2);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 2*flaga);
 					sprintf(text, "Pressed: %d", 2);
 				}
 				break;
 			case '3':
 				if(wczytano < 0) {
-					tmp = 3;
-					wynik = tmp;
+					wynik = 3*flaga;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 3);
 				} else {
-					tmp = addToCurrentNumber(tmp, 3);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 3*flaga);
 					sprintf(text, "Pressed: %d", 3);
 				}
 				break;
 			case '4':
 				if(wczytano < 0) {
-					tmp = 4;
-					wynik = tmp;
+					wynik = 4*flaga;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 4);
 				} else {
-					tmp = addToCurrentNumber(tmp, 4);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 4*flaga);
 					sprintf(text, "Pressed: %d", 4);
 				}
 				break;
 			case '5':
 				if(wczytano < 0) {
-					tmp = 5;
-					wynik = tmp;
+					wynik = 5*flaga;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 5);
 				} else {
-					tmp = addToCurrentNumber(tmp, 5);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 5*flaga);
 					sprintf(text, "Pressed: %d", 5);
 				}
 				break;
 			case '6':
 				if(wczytano < 0) {
-					tmp = 6;
-					wynik = tmp;
+					wynik = 6*flaga;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 6);
 				} else {
-					tmp = addToCurrentNumber(tmp, 6);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 6*flaga);
 					sprintf(text, "Pressed: %d", 6);
 				}
 				break;
 			case '7':
 				if(wczytano < 0) {
-					tmp = 7;
-					wynik = tmp;
+					wynik = 7*flaga;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 7);
 				} else {
-					tmp = addToCurrentNumber(tmp, 7);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 7*flaga);
 					sprintf(text, "Pressed: %d", 7);
 				}
 				break;
 			case '8':
 				if(wczytano < 0) {
-					tmp = 8;
-					wynik = tmp;
+					wynik = 8*flaga;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 8);
 				} else {
-					tmp = addToCurrentNumber(tmp, 8);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 8*flaga);
 					sprintf(text, "Pressed: %d", 8);
 				}
 				break;
 			case '9':
 				if(wczytano < 0) {
-					tmp = 9;
-					wynik = tmp;
+					wynik = 9*flaga;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 9);
 				} else {
-					tmp = addToCurrentNumber(tmp, 9);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 9*flaga);
 					sprintf(text, "Pressed: %d", 9);
 				}
 				break;
 			case '0':
 				if(wczytano < 0) {
 					// nie zmieniam wartoœci zmiennej finalnej jak pierwsze jest zero
-					tmp = 0;
+					wynik=0;
 					wczytano = 1;
 					sprintf(text, "Pressed: %d", 0);
 				} else {
-					tmp = addToCurrentNumber(tmp, 0);
-					wynik = tmp;
+					wynik = addToCurrentNumber(wynik, 0);
 					sprintf(text, "Pressed: %d", 0);
 				}
 				break;
+			case '#':
+				if(wczytano < 0)
+					// nie zmieniam wartoœci zmiennej finalnej jak pierwsze jest zero
+					flaga *= -1;
+				break;
 			case 'C':
-				tmp = 0;
 				liczba1final = -1;
 				liczba2final = -1;
 				wczytano = -1;
+				flaga = 1;
 				wynik = 0;
 				sprintf(text, "Pressed: %c", 'C');
 				break;
@@ -234,30 +222,33 @@ int main()
 				// zapamiêtanie odpowiedniej operacji
 				operacja = '+';
 				// wczytanie zmiennej tymczasowej do pierwszej zmiennej finalnej
-				liczba1final = tmp;
+				liczba1final = wynik;
 				// zresetowanie zmiennych pomocnicznych
-				tmp = 0;
+				//wynik = 0;
 				wczytano = -1;
+				flaga = 1;
 				// do sprawdzenia co jest w zmiennych
 				sprintf(text, "Pressed: %c %d %d", symbol, liczba1final, liczba2final);
 				break;
 			case '*':
 				operacja = '*';
-				liczba1final = tmp;
-				tmp = 0;
+				liczba1final = wynik;
+				//wynik = 0;
 				wczytano = -1;
+				flaga = 1;
 				sprintf(text, "Pressed: %c %d %d", symbol, liczba1final, liczba2final);
 				break;
 			case '-':
 				operacja = '-';
-				liczba1final = tmp;
-				tmp = 0;
+				liczba1final = wynik;
+				//wynik = 0;
 				wczytano = -1;
+				flaga = 1;
 				sprintf(text, "Pressed: %c %d %d", symbol, liczba1final, liczba2final);
 				break;
 			case '=':
 				// wczytanie zmiennej tymczasowej do drugiej zmiennej finalnej
-				liczba2final = tmp;
+				liczba2final = wynik;
 				// wykonanie odpowiednich operacji jesli wczytano dwie liczby
 				if(operacja == '+' && liczba2final != -1 && liczba1final != -1) {
 					wynik = liczba1final + liczba2final;
@@ -270,22 +261,18 @@ int main()
 				}
 				sprintf(text, "Pressed: %c", symbol);
 				// zresetowanie wszystkich zmiennych
-				tmp = 0;
+				//wynik = 0;
 				liczba1final = -1;
 				liczba2final = -1;
 				wczytano = -1;
+				flaga = 1;
 				break;
 			default:
 				break;
 			}
 			LCD_WriteText(text);
-			_delay_ms(200);
 		}
-		_delay_ms(200);
-		// czekanie az uzytkownik nie pusci przycisku
-		// to umozliwia zobaczyc co aktualnie jest klikniete
-//		while (bit_is_clear(PINC, PD0) || bit_is_clear(PINC, PD1) || bit_is_clear(PINC, PD2) || bit_is_clear(PINC, PD3))
-//			_delay_ms(100);
+		_delay_ms(100);
 	}
 	return 0;
 }
