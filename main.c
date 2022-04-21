@@ -35,8 +35,9 @@ int getKey16() {
 			// sprawdzenie czy przycisk jest wcisniety -> stan niski dla kolumny
 			if (bit_is_clear(PINC, j)) {
 				_delay_ms(20);
-				while(bit_is_clear(PIND, j)) 
-					_delay_ms(5);
+				// to sprawia ze nie widac w trakcie klikniecia co jest klikniete
+				// ale chyba w rzeczywistoœci tak powinno by
+				while(bit_is_clear(PINC, j)) _delay_ms(5);
 				sbi(PORTC, i + 4);
 				return i * 4 + j + 1; // [1 - 16] jak na plytce
 			}
@@ -283,8 +284,8 @@ int main()
 		_delay_ms(200);
 		// czekanie az uzytkownik nie pusci przycisku
 		// to umozliwia zobaczyc co aktualnie jest klikniete
-		while (bit_is_clear(PINC, PD0) || bit_is_clear(PINC, PD1) || bit_is_clear(PINC, PD2) || bit_is_clear(PINC, PD3))
-			_delay_ms(100);
+//		while (bit_is_clear(PINC, PD0) || bit_is_clear(PINC, PD1) || bit_is_clear(PINC, PD2) || bit_is_clear(PINC, PD3))
+//			_delay_ms(100);
 	}
 	return 0;
 }
